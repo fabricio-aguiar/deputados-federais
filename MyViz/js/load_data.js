@@ -5,7 +5,7 @@ loadDsv("data/Deputados-BR-Dados-Por-Periodo.csv", function (error, data) {
         console.log(error);
     }
     
-    d3.select('h2#data-title').text('Deputados federais do RJ');
+    d3.select('h2#data-title').text('Deputados federais');
     // d3.select('div#data pre')
     //     .html(JSON.stringify(data, null, 4)); 
     makeFilterAndDimensions(data);
