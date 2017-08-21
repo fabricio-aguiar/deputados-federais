@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+    <link href=" http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet"> <!-- note: http://stackoverflow.com/questions/20032426/fontawesome-doesnt-display-in-firefox -->
+
+    
+    </head>
+<body>
+    <div id="chart"></div>
+    <style>
+     .homem:hover {
+      fill: royalblue;
+     }
+
+
+     .mulher:hover {
+      fill: red;
+     }
+
+
+     .d3-tip {
+    line-height: 1;
+    font-weight: bold;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border-radius: 2px;
+}
+
+
+/* Creates a small triangle extender for the tooltip */
+
+.d3-tip:after {
+    box-sizing: border-box;
+    display: inline;
+    font-size: 10px;
+    width: 100%;
+    line-height: 1;
+    color: rgba(0, 0, 0, 0.8);
+    content: "\25BC";
+    position: absolute;
+    text-align: center;
+}
+
+
+/* Style northward tooltips differently */
+
+.d3-tip.n:after {
+    margin: -1px 0 0 0;
+    top: 100%;
+    left: 0;
+}
+
+    </style>
+    <script type="text/javascript">
+    var margin = {top: 10, right: 10, bottom: 10, left: 15},
+    width = 470 - margin.left - margin.right;
+    height = 246 - margin.top - margin.bottom;
+    
+    var sdata = [
+      { 'n': 51, 'color': '#0000FF', 'name': 'Homem', 'sex': 'male' }, 
+      { 'n': 7, 'color': '#FFC0CB', 'name': 'Mulher', 'sex': 'female' },
+    ];
+        
+    modulo = 20;
+    
+    var 
+	xScale = d3.scale.linear()
+	  .domain([0, modulo])
+	  .range([0, width]),
+	yScale = d3.scale.linear()
+	  .domain([0, 6])
+	  .range([height, 0]);
+	 
+	j = 0; 
+	data = [];
+
+    for (key in sdata) {
+      for (i=0;i<sdata[key]['n'];i++) { 
+         data.push({'sex': sdata[key]['sex'],'color':sdata[key]['color'], 'total': sdata[key]['n']});
+      }
+    }
+
+count = 0;     
+modulo = modulo/2;
+for (key=0; key < sdata[0]['n']; key++) {
+  column = Math.floor(count/modulo);
+  row = count % modulo;
+  data[key]['x'] = row;
+  data[key]['y'] = column;
+  count++;
+}
+altura = column;
+count=0;
+for (key = sdata[0]['n']; key < data.length; key++) {
+        column = Math.floor(count / modulo);
+        row = count % modulo;
+        data[key]['x'] = row + 10;
+        data[key]['y'] = column;
+        count++;
+}
+if (altura < column){
+    altura = column;
+}
+icon = { 'width': height / 10, 'height': height / (altura + 2) };
+
+
+var tip = d3.tip()
+        .attr('class', 'd3-tip')
+        .offset([-10, 0])
+        .html(function (data) {
+            return "<strong>Total:</strong> <span style='color:red'>" + data.total + "</span>";
+        })
+
+  var svg = d3.select("#chart").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  svg.call(tip);
+    
+  var icons = svg.selectAll(".icon")
+		.data(data)
+      .enter().append("text")
+        .attr('font-family', 'FontAwesome')
+        .attr('font-size', icon['height'])
+        .attr('fill',function(d) {return d.color;})
+        .attr('text-anchor',"middle")
+        .attr('title',function(d) {return d.name;})
+        .attr('x',function(d) {return xScale(d.x);})
+        .attr('y',function(d) {return yScale(d.y);})
+        .on('mouseover', tip.show)
+        .on('mouseout', tip.hide)
+        .attr("class",function (d) { if (d.sex == 'female') return 'mulher'; else return 'homem'; })
+        .text(function(d) {if (d.sex == 'female') return '\uf182'; else return '\uf183'; });
+
+    
+
+legend = ["Mulher","Homem"];
+for (key in sdata) {        
+ svg.append("text")
+  .attr('font-size',20)
+  .attr('font-family', 'sans-serif')
+  .attr('text-anchor',"start")
+  .attr('fill', sdata[key]['color'])
+  .attr('x',function(d) {return key*width/2;})
+  .attr('y',5)
+  .text(sdata[key]['name']);
+}
+
+
+        
+    </script>
+  </body>
+</html>

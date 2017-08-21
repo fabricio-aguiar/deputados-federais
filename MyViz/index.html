@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt">
+    
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="css/style.css" rel="stylesheet">
+    </head>
+    <body>
+    <h2 id='data-title'></h2>
+    <div id='graph'>
+        
+    </div>
+
+    <div id="dep-map">
+        <div id="map-tooltip">
+            <h2></h2>
+            <p></p>
+        </div>
+    </div>
+
+    <div id="dep-list">
+        <h2>Deputados</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th id='nome'>Nome</th>
+                    <th id='ceap'>CEAP</th>
+                    <th id='partido'>Partido</th>
+                    <th id='uf'>UF</th>
+                    <th id='atuacao'>Atuação (meses)</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <div id='data'>
+        <pre></pre>
+    </div>
+
+
+    <script src="//d3js.org/d3.v3.min.js"></script>
+    <script src="//d3js.org/topojson.v1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js"></script>
+    <script src="lib/crossfilter.min.js"></script>
+    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+    <script src="js/load_data.js"></script>
+    <script src="js/load_mapa.js"></script>
+    <script src="js/lista_deputado.js"></script>
+    </body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <!--<script src="d3.v3.js"></script>-->
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+<link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!-- note: http://stackoverflow.com/questions/20032426/fontawesome-doesnt-display-in-firefox -->
+<link href="http://maxcdn.bootstrapcdn.com/bootswatch/3.2.0/united/bootstrap.min.css" rel="stylesheet">
+    <style>
+    
+    .axis path,
+      .axis line {
+          fill: none;
+          stroke: #000;
+          shape-rendering: crispEdges;
+        }
+          path, line {
+        stroke:#bbb;
+        stroke-width:1
+      }
+      /*http://www.d3noob.org/2013/01/adding-drop-shadow-to-allow-text-to.html*/
+      text.shadow {
+        stroke: gray;
+        stroke-width: 1px;
+        opacity: 0.9;
+    }
+    
+    .col-lg-4{
+       position: absolute;
+       top: 85px;
+       left: 700px;
+    }
+    .half {
+      /* fill: #888; */
+      fill: white;
+      opacity:0;
+      /* opacity:0.5; */
+    }
+        </style>
+  </head>
+  <body>
+    <div class="navbar navbar-default">
+      <div class="container">
+        <div class="navbar-header">
+          <span class="navbar-brand">Deputados federais</span>
+        </div>
+      </div>
+    </div>
+    <div id="chart"></div>
+    <!-- <div class="alert alert-info">
+      The <strong>algorithm.py</strong> calculates optimal number of representatives in each row for several numbers of rows (+ size of icons and gap between the rows). These numbers are used as parameters for the chart.
+      <br/><em>It may be slow for big parliaments, but it is needed just once for any number (e.g., 200 representatives took about 1 hour, due to the grid search - further optimization possible, my trial using steepest descent algorithm did not converge many times).</em>
+    </div> -->
+    <div class="col-lg-4">
+      <div class="bs-component">
+        <div class="list-group">
+          <a href="#" class="list-group-item active">Partidos</a>
+          <a href="#" class="list-group-item">
+            <div id="legend"></div>
+          </a>
+        </div>
+      </div>
+      <!-- <div class="alert alert-info">
+      The legend is also created as a svg picture.
+      </div> -->
+    </div>
+    <script>
+
+    // 2:1!
+var margin = {top: 0, right: 0, bottom: 0, left: 0},
+    width = 600 - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom;
+
+var svg = d3.select("#chart").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+/*examples of parliaments*/
+/*Plasy 2010*/
+/*var groups = [
+  {'name':'KSČM','n':2,'color':'red'},
+  {'name':'ČSSD','n':4,'color':'orange'},
+  {'name':'KDU-ČSL','n':2,'color':'yellow'},
+  {'name':'TOP 09','n':2,'color':'violet'},
+  {'name':'ODS','n':5,'color':'blue'}
+];*/
+/*Czech Republic 2013*/
+var groups = [
+  {'name':'PT','n':53,'color':'red'},
+  {'name':'PSDB','n':14,'color':'pink'},
+  {'name':'PMDB','n':50,'color':'orange'},
+  {'name':'PSOL','n':14,'color':'yellow'},
+  {'name':'REDE','n':47,'color':'aqua'},
+  {'name':'PTB','n':6,'color':'purple'},
+  {'name':'DEM','n':16,'color':'blue'}
+];
+/*Czech Republic Senate 2013*/
+/*var groups = [
+  {'name':'KSČM','n':2,'color':'red'}, 
+  {'name':'ČSSD','n':46,'color':'orange'},
+  {'name':'SPOZ','n':1,'color':'pink'},
+  {'name':'Severočeši','n':2,'color':'darkred'},
+  {'name':'Piráti','n':1,'color':'black'},
+  {'name':'Zelení','n':1,'color':'green'},
+  {'name':'KDU-ČSL','n':5,'color':'yellow'},
+  {'name':'Nezávislí kand.','n':1,'color':'gray'},
+  {'name':'Nestraníci','n':1,'color':'aqua'},
+  {'name':'TOP 09 + STAN','n':4,'color':'purple'},
+  {'name':'Ostravak','n':1,'color':'brown'},
+  {'name':'ODS','n':15,'color':'blue'},
+  {'name':'Neobsazeno','n':1,'color':'white'}
+];*/
+
+/*European Parliament 2014*/
+/*var groups = [
+  {'name':'GUE-NGL','n':52,'color':'darkred'},
+  {'name':'Greens-EFA','n':50,'color':'green'},
+  {'name':'S&D','n':191,'color':'red'},
+  {'name':'ALDE','n':67,'color':'yellow'},
+  {'name':'EPP','n':221,'color':'blue'},
+  {'name':'ECR','n':70,'color':'darkblue'},
+  {'name':'EFDD','n':48,'color':'aqua'},
+  {'name':'Non-inscrits','n':52,'color':'gray'}
+];*/
+
+/*Plasy*/
+/*var h = {
+  'n': [6,9],
+  'g': 1.19,
+  'w': 0.52,
+}*/
+
+/*CZ*/
+/*var h = {
+  'n': [33,37,40,43,47],
+  'g': 1.17,
+  'w': 0.09,
+}
+var h = {
+  'n': [24,28,31,35,39,43],
+  'g': 1.23,
+  'w': 0.13,
+}
+var h = {
+  'n': [18,21,25,29,32,36,39],
+  'g': 1.19,
+  'w': 0.17,
+}*/
+var h = {
+  'n': [8,11,15,19,22,26,29,33,37],
+  'g': 1.20,
+  'w': 0.39,
+}
+/*var h = {
+  'n': [4,8,11,15,18,22,25,29,32,36],
+  'g': 1.20,
+  'w': 0.73,
+}*/
+
+/*CZ Senate*/
+/*var h = {
+  'n': [9,13,16,20,23],
+  'g': 1.2,
+  'w': 0.34,
+}*/
+/*EP*/
+/*var h = {
+  'n': [85,88,90,93,95,98,100,102],
+  'g': 1.16,
+  'w': 0.03,
+}
+var h = {
+  'n': [31,34,38,41,45,48,52,55,59,62,66,69,73,78],
+  'g': 1.19,
+  'w': 0.1,
+}*/
+
+//max radius (for scales)
+rmax = 1 + h['n'].length *h['g']*h['w'];
+
+var 
+	xScale = d3.scale.linear()
+	  .domain([-1*rmax, rmax])
+	  .range([0, width]),
+    yScale = d3.scale.linear()
+      .domain([0, rmax])
+      .range([height,0])
+    x0Scale = d3.scale.linear()
+	  .domain([0, 2*rmax])
+	  .range([0, width]);
+
+//generate data: 1 representative ~ 1 datum
+data = [];
+s = [];
+for (i in h['n']) {
+  s.push((Math.PI/h['w'] + Math.PI*i*h['g']-h['n'][i])/(h['n'][i] - 1));
+  ninrow = h['n'][i];
+  radwidth = Math.PI/(h['n'][i]+(h['n'][i]-1)*s[i]);
+  radspace = radwidth*s[i];
+  r = 1 + i*h['g']*h['w'];
+  for (j=0;j<ninrow;j++) {
+    x = Math.cos(radwidth*(0.5+j)+j*radspace)*r;
+    y = Math.sin(radwidth*(0.5+j)+j*radspace)*r;
+    rot = -1*(radwidth*(0.5+j)+j*radspace)/Math.PI*180+90;
+    data.push({'x':x,'y':y,'rot':rot});
+  }
+}
+
+//sort data by rotation (representatives from 1 parl. groups together)
+data.sort(function(x,y) {
+  if (x['rot'] < y['rot']) return -1;
+  if (x['rot'] > y['rot']) return 1;
+  return 0
+});
+
+//add colors and names to data - may be used later
+i = 0;
+for (gkey in groups) {
+  group = groups[gkey];
+  for (j=0;j<group['n'];j++) {
+    data[i]['color'] = group['color'];
+    data[i]['name'] = group['name'];
+    i++;
+  }
+}
+
+/* MAJORITY ARC */
+var angle = [{'startangle':0,'endangle':Math.PI/2}];
+
+var arci = d3.svg.arc()
+                .startAngle(function(d){return d.startangle})
+                .endAngle(function(d){return d.endangle})
+                .outerRadius(x0Scale(rmax))
+                .innerRadius(0);
+
+var position = [xScale(0),yScale(0)];
+             
+//http://stackoverflow.com/questions/8538651/d3-update-data-and-update-graph             
+var arc = svg.selectAll('.half') 
+    .data(angle)
+    .enter()
+    .append("path")
+    .attr("d",arci)
+    .attr("transform", "translate(" + position + ")")
+    .attr("class","half");
+
+//http://stackoverflow.com/questions/15303342/how-to-apply-drag-behavior-to-a-d3-svg-arc
+var drag = d3.behavior.drag()
+    .on("drag", function(d,i) {
+        alpha1 = Math.atan((d3.event.x - xScale(0))/(-d3.event.y + yScale(0)));
+        x2 = d3.event.dx + d3.event.x;
+        y2 = d3.event.dy + d3.event.y;
+        alpha2 = Math.atan((x2 - xScale(0))/(-y2 + yScale(0)));
+        alpha = alpha2-alpha1;
+        angle[0]['startangle'] += alpha;
+        angle[0]['endangle'] += alpha;
+        /*angle[0]['startangle'] = Math.min(0,angle[0]['startangle']);
+        angle[0]['startangle'] = Math.max(Math.PI/2,angle[0]['startangle']);
+        angle[0]['endangle'] = Math.min(Math.PI/2,angle[0]['endangle']);
+        angle[0]['endangle'] = Math.max(Math.PI,angle[0]['endangle']);*/
+        arc.attr("d",arci);   // redraw the arc
+        /*position[0] += d3.event.dx;
+        position[1] += d3.event.dy;
+        d3.select(this)
+        .attr("transform", function(d,i){
+            return "translate(" + position + ")"
+        })*/
+    });
+arc.call(drag);
+
+// creating HEMICYCLE
+var icons = svg.selectAll(".icon")
+		.data(data)
+      .enter().append("text")
+        .attr('font-family', 'FontAwesome')
+        .attr('font-size',x0Scale(h['w']*1.15)) //the icon is about 1.15times higher then wide
+        .attr('fill', function(d) {return d.color;})
+        .attr('text-anchor',"middle")
+        .attr('class', 'shadow')
+        .attr('x',function(d) {return xScale(d.x);})
+        .attr('y',function(d) {return yScale(d.y);})
+        .attr("transform",function(d) {return "rotate("+d.rot+","+xScale(d.x)+","+yScale(d.y)+")"})
+        .text('\uf007');
+
+//custom text
+svg.append("text")
+  .attr('font-family', 'sans-serif')
+  .attr('font-size',x0Scale(h['w']*1))        //adjust as needed
+  .attr('font-weight','bold')
+  .attr('text-anchor',"middle")
+  .attr('fill', '#444')
+  .attr('x',xScale(0)) 
+  .attr('y',yScale(0))
+  .text("513");
+
+/* LEGEND */
+heightleg = x0Scale(groups.length * h['w']*1.15*h['g']);
+var svgleg = d3.select("#legend").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", heightleg + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+//sorting for legend
+groups.sort(function(x,y) {
+  if (x.n > y.n) return -1;
+  if (x.n < y.n) return 1;
+  return 0;
+});
+//creating legend
+var iconsleg = svgleg.selectAll(".iconleg")
+		.data(groups)
+      .enter().append("text")
+        .attr('font-family', 'FontAwesome')
+        .attr('font-size',x0Scale(h['w']*1.15))
+        .attr('fill', function(d) {return d.color;})
+        .attr('text-anchor',"middle")
+        .attr('class', 'shadow')
+        .attr('x',x0Scale(h['w']*1.15))
+        .attr('y',function(d,i) {return (i+1)*x0Scale(h['w']*1.15);})
+        .text('\uf007');
+
+var textleg = svgleg.selectAll(".textleg")
+		.data(groups)
+      .enter().append("text")
+        .attr('font-family', 'sans-serif')
+        .attr('font-size',x0Scale(h['w']*0.9))
+        //.attr('fill', function(d) {return d.color;})
+        //.attr('text-anchor',"middle")
+        //.attr('class', 'shadow')
+        .attr('x',x0Scale(2*h['w']*1.15))
+        .attr('y',function(d,i) {return (i+1)*x0Scale(h['w']*1.15);})
+        .text(function(d){return d.name + ' (' + d.n + ')'});
+   </script>
+  </body>
+</html>

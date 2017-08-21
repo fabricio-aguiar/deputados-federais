@@ -1,0 +1,54 @@
+http://www2.camara.leg.br/transparencia
+
+http://www.tre-rj.gov.br/site/eleicoes/2014/index.js
+Informações sobre Candidatos > Relação de Candidatos
+
+http://inter01.tse.jus.br/divulga-cand-2014/eleicao/2014/UF/RJ/candidatos/cargo/6
+
+http://www2.camara.leg.br/a-camara/conheca/quantos-sao-e-de-que-forma-e-definido-o-numero-de-deputados
+total RJ : 46 
+
+http://www.tse.jus.br/hotSites/estatistica_2014/resultados/resultado-eleicao.html
+
+http://www.tse.jus.br/hotSites/estatistica_2014/resultados/quociente-partidario.html
+
+http://www2.camara.leg.br/transparencia/dados-abertos/dados-abertos-legislativo
+proposiçoes
+
+http://www.atlaspolitico.com.br/perfil/nomefantasiaNUMERO	
+
+http://www.tse.jus.br/hotSites/pesquisas-eleitorais/candidatos_anos/2014.html
+
+http://www.tse.jus.br/hotSites/pesquisas-eleitorais/prestacao_contas_anos/2014.html
+
+http://www2.camara.leg.br/deputados/pesquisa
+
+http://www.camara.leg.br/internet/deputado/pesquisaHistorico.asp
+
+http://www2.camara.leg.br/transparencia/dados-abertos/dados-abertos-legislativo/webservices/deputados/obterdeputados
+
+pegar a bio aqui:
+http://www.camara.leg.br/internet/deputado/Dep_Lista.asp?Legislatura=55&Partido=QQ&SX=QQ&Todos=None&UF=RJ&condic=QQ&forma=lista&nome=&ordem=nome&origem=None
+
+Perguntas a serem respondidas:
+1) O que é cota parlamentar ?
+http://www2.camara.leg.br/transparencia/acesso-a-informacao/copy_of_perguntas-frequentes/cota-para-o-exercicio-da-atividade-parlamentar
+
+2) O que é Quociente Partidário?
+formula:
+http://www.tse.jus.br/imprensa/noticias-tse/2016/Setembro/saiba-como-calcular-os-quocientes-eleitoral-e-partidario-nas-eleicoes-2016
+7.673.438/46 = 166.813,87
+
+3)Gastos x Patrimonio candidato ? 
+
+4)Gastos x Proposiçoes ?
+
+5) mais votos = mais proposiçoes ?
+
+6) mais votos = mais gastos ?
+
+7) partido q mais gasta x candidato mais gasta ? padrao do partido ?
+
+8) partido x proposiçoes ?
+
+9)grau de instruçao x gastos ?
