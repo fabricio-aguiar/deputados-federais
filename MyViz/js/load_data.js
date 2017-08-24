@@ -11,7 +11,7 @@ loadDsv("data/Deputados-BR-Dados-Por-Periodo.csv", function (error, data) {
     //     .html(JSON.stringify(data, null, 4)); 
     depviz.data = data;
     depviz.makeFilterAndDimensions(data);
-    
+    depviz.genero(depviz.sexoDim);
 })
 
 depviz.makeFilterAndDimensions = function (data) {
@@ -37,7 +37,12 @@ depviz.makeFilterAndDimensions = function (data) {
     // partidoDim.top(Infinity);
 
     // depviz.grafico(depviz.sexoDim);
+    
 }
+
+
+    
+
 
 depviz.grafico = function (data) {
     

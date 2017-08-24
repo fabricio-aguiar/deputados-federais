@@ -1,7 +1,6 @@
 (function (depviz) {
 d3.json("data/uf.json", function (error, data) {
        
-    
     active = d3.select(null);
     var featureCollection = topojson.feature(data, data.objects.uf);
     
@@ -19,7 +18,7 @@ d3.json("data/uf.json", function (error, data) {
     var bounds = d3.geo.bounds(featureCollection);
      tooltip = d3.select('#map-tooltip');
 
-    var centerX = d3.sum(bounds, function (d) { return d[0]; }) / 2,
+    var centerX = d3.sum(bounds, function (d) { return d[0]; }) / 2.7,
         centerY = d3.sum(bounds, function (d) { return d[1]; }) / 2;
 
     var projection = d3.geo.mercator()
@@ -86,14 +85,18 @@ function clicked(d) {
   setTimeout(function () { tooltip.style('left', (px)); }, 850);
   depviz.estadoDim.filter(d.id); 
   data = depviz.estadoDim.top(Infinity);
+  depviz.genero(depviz.sexoDim);
+  depviz.sexoDim.filter(); 
+  data = depviz.sexoDim.top(Infinity);
   depviz.listardep(data);
-  
 }
 
 function reset() {
     depviz.estadoDim.filter(); 
+    depviz.sexoDim.filter(); 
     data = depviz.estadoDim.top(Infinity);
     depviz.listardep(data);
+    depviz.genero(depviz.sexoDim);
     active.classed("active", false);
     active = d3.select(null);
 
@@ -109,5 +112,5 @@ function reset() {
 
     tooltip.style('left', '-9999px');
 }
-
+    
 }(window.depviz = window.depviz || {}));

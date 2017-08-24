@@ -14,7 +14,13 @@ a:hover {
     text-decoration:underline;
 }
 
-#chart { position: relative; }
+#chart { 
+    position: relative; 
+    top:10px;
+    height:200px;
+    width:350px;
+    left:420px;
+}
 
 #nbviz {
     position: absolute;
@@ -78,7 +84,7 @@ a:hover {
     background:azure;
     top:60px;
 	left:10px;
-    width:950px;
+    width:550px;
     height:550px;
 }
 
@@ -99,7 +105,7 @@ a:hover {
     top:60px;
     height:550px;
     width:290px;
-    left:960px;
+    left:900px;
     padding-left:10px;
 }
 
@@ -313,7 +319,7 @@ a:hover {
 .states{
     fill: #ccc;
     cursor: pointer;
-	
+	left: 0px;
 }
 
 .active {
