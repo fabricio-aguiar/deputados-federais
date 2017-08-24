@@ -17,6 +17,7 @@ dataset2015 = pd.read_csv('../Deputados/data/Ano-2015.csv', sep=';',
 
 
 dataset = pd.concat([dataset2017, dataset2016, dataset2015])
+dataset = dataset[dataset['nuLegislatura']== 2015]
 codigos = dataset['idecadastro'].unique()
 
 camara = cn.Camara()
@@ -25,11 +26,14 @@ lista = [['idecadastro', 'Legislatura', 'Nome', 'Nome Parlamentar', 'Profissao',
 
 for id in codigos:
     try:
-        detalhes = camara.deputados.obter_detalhes_deputado(ideCadastro=int(id))
+        detalhes = camara.deputados.obter_detalhes_deputado(ideCadastro=int(id), numLegislatura= 55)
     except:
         continue
     bsoup = BeautifulSoup(detalhes['content'], "lxml")
-    leg = bsoup.find('numlegislatura').text
+    try:
+        leg = bsoup.find('numlegislatura').text
+    except:
+        continue
     profissao = bsoup.find('nomeprofissao').text
     situacaoNaLegislaturaAtual = bsoup.find('situacaonalegislaturaatual').text
     nome = bsoup.find('nomecivil').text
