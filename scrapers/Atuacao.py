@@ -63,8 +63,8 @@ for deputado in dataset['txNomeParlamentar'].unique():
  countS = 0
  atuacao = []
  
- for ocorrencia in items:
-     if (("Posse()" in ocorrencia.text) or ("Reassunção" in ocorrencia.text[0:23]) or ("Posse(em virtude de" in ocorrencia.text)) and ("Afastamento(em virtude de" not in ocorrencia.text):
+ for n, ocorrencia in enumerate(items):
+     if (("Posse()" in ocorrencia.text) or ("Reassunção" in ocorrencia.text[0:23]) or (n == 0) or ("Posse(em virtude de" in ocorrencia.text)) and ("Afastamento(em virtude de" not in ocorrencia.text):
          entra = ocorrencia.text
          entra = entra.split(" ")[0]
          countE += 1
