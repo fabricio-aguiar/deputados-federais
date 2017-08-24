@@ -1,3 +1,4 @@
+(function (depviz) {
 var loadDsv = d3.dsv(";", "text / plain; charset = ISO - 8859 - 1");
 
 loadDsv("data/Deputados-BR-Dados-Por-Periodo.csv", function (error, data) {
@@ -5,18 +6,21 @@ loadDsv("data/Deputados-BR-Dados-Por-Periodo.csv", function (error, data) {
         console.log(error);
     }
     
-    listardep(data);
+    depviz.listardep(data);
           
 })
 
-listardep = function (data) {
-    var rows, cells;
-    // // Sort the winners' data by year
-    // var data = data.sort(function (a, b) {
-    //     return +b.year - +a.year;
-    // });
+depviz.listardep = function (data) {
+    var rows, cells, upd;
+    // Sort the winners' data by year
+    var data = data.sort(function (a, b) {
+        return +b['Total CEAP'] - +a['Total CEAP']; 
+    });
+    upd = d3.select('#dep-list tbody')
+        .selectAll('tr').remove()
     // Bind our winner's data to the table rows
     rows = d3.select('#dep-list tbody')
+        // .selectAll('tr').remove()
         .selectAll('tr')
         .data(data);
 
@@ -25,6 +29,7 @@ listardep = function (data) {
             console.log('You clicked a row ' + JSON.stringify(d));
             d3.select('div#data pre')
                 .html(JSON.stringify(d, null, 4)); 
+            window.scrollBy(0, 880);
             // displayDep(d); 
         });
     // Fade out excess rows over 2 seconds
@@ -34,14 +39,34 @@ listardep = function (data) {
         .style('opacity', 0)
         .remove();
     
-    data.forEach(function(d) {
-      d['Total CEAP'] = "R$ " + d['Total CEAP'];
-      d['Total CEAP'] = d['Total CEAP'].replace(".",",");  
+    // aux = data;
+    // aux.forEach(function(d) {
+    //   d['Total CEAP'] = "R$ " + d['Total CEAP'];
+    //   d['Total CEAP'] = d['Total CEAP'].replace(".",",");  
+    // });
+    
+    var localized = d3.locale({
+        "decimal": ",",
+        "thousands": ".",
+        "grouping": [3],
+        "currency": ["R$", ""],
+        "dateTime": "%d/%m/%Y %H:%M:%S",
+        "date": "%d/%m/%Y",
+        "time": "%H:%M:%S",
+        "periods": ["AM", "PM"],
+        "days": ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"],
+        "shortDays": ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
+        "months": ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
+        "shortMonths": ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
     });
+    var numberFormat = localized.numberFormat(",.2f");
+    
+    var formatDecimalComma = d3.format(".2f"),
+        formatMoney = function (d) { return "R$ " + numberFormat(formatDecimalComma(d)); };
 
     cells = rows.selectAll('td') 
         .data(function (d) {
-            return [d['Nome para Urna'], d['Total CEAP'], d.Partido, d.UF, d['Atuacao em meses']];
+            return [d['Nome para Urna'], formatMoney(d['Total CEAP']), d.Partido, d.UF, numberFormat(d['Atuacao em meses'])];
         });
 
     // Append data cells, then set their property text
@@ -56,4 +81,4 @@ listardep = function (data) {
     //         data[Math.floor(Math.random() * data.length)]); 
     // }
 }
-;
+}(window.depviz = window.depviz || {}));

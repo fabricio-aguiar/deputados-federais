@@ -1,3 +1,4 @@
+(function (depviz) {
 d3.json("data/uf.json", function (error, data) {
        
     
@@ -83,9 +84,16 @@ function clicked(d) {
   
   setTimeout(function () { tooltip.style('top', (py)); }, 850);
   setTimeout(function () { tooltip.style('left', (px)); }, 850);
+  depviz.estadoDim.filter(d.id); 
+  data = depviz.estadoDim.top(Infinity);
+  depviz.listardep(data);
+  
 }
 
 function reset() {
+    depviz.estadoDim.filter(); 
+    data = depviz.estadoDim.top(Infinity);
+    depviz.listardep(data);
     active.classed("active", false);
     active = d3.select(null);
 
@@ -102,4 +110,4 @@ function reset() {
     tooltip.style('left', '-9999px');
 }
 
-;
+}(window.depviz = window.depviz || {}));

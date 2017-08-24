@@ -91,8 +91,8 @@ a:hover {
 
 #graph{
     top:620px;
-    height:240px;
-    width:700px;
+    height:250px;
+    width:900px;
 }
 
 #dep-list{
@@ -186,7 +186,7 @@ a:hover {
 #dep-list table{ font-size:10px; }
 
 #dep-list table th#nome {width:120px}
-#dep-list table th#ceap {width:120px}
+#dep-list table th#ceap {width:130px}
 #dep-list table th#partido {width:60px}
 #dep-list table th#uf {width:20px}
 #dep-list table th#atuacao {width:60px}
