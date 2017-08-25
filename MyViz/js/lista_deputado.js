@@ -23,6 +23,7 @@
             //     .html(JSON.stringify(d, null, 4)); 
             displayDep(d); 
             document.getElementById('dados-dep').scrollIntoView();
+            window.scrollBy(-900, 0);
             // window.scrollBy(0, 880);
             // window.scrollTo(0, document.body.scrollHeight);
         });
