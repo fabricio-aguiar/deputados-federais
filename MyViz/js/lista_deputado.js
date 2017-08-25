@@ -22,9 +22,9 @@
             // d3.select('div#data')
             //     .html(JSON.stringify(d, null, 4)); 
             displayDep(d); 
-            // document.getElementById('data').scrollIntoView();
+            document.getElementById('dados-dep').scrollIntoView();
             // window.scrollBy(0, 880);
-            window.scrollTo(0, document.body.scrollHeight);
+            // window.scrollTo(0, document.body.scrollHeight);
         });
     // Fade out excess rows over 2 seconds
     TRANS_DURATION = 2000;
@@ -66,7 +66,7 @@
 
     
     displayDep = function (data) {
-        link = "https://inter01.tse.jus.br/divulga-cand-2014/eleicao/2014/idEleicao/143/cargo/6/UF/";
+        link = "http://inter01.tse.jus.br/divulga-cand-2014/eleicao/2014/idEleicao/143/cargo/6/UF/";
         link = link + data.UF + "/candidato/";
         d3.select('div#data')
           .selectAll('*')
@@ -77,6 +77,7 @@
           .attr("class", "foto");
         d3.select('div#data')
             .append('div')
+            .attr("id", "dados-dep")
             .attr("class", "lado");
 
         direita = d3.select('.lado');
