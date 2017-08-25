@@ -10,14 +10,17 @@ loadDsv("data/Deputados-BR-Dados-Por-Periodo.csv", function (error, data) {
     // d3.select('div#data pre')
     //     .html(JSON.stringify(data, null, 4)); 
     depviz.data = data;
+    depviz.listardep(data);
     depviz.makeFilterAndDimensions(data);
+    depviz.partidosGraf(data);
+    depviz.updateMap(depviz.partidoData());
     depviz.genero(depviz.sexoDim);
 })
 
 depviz.makeFilterAndDimensions = function (data) {
     filter = crossfilter(data);
     depviz.partidoDim = filter.dimension(function (o) {
-        return o.Partido;
+        return o['Partido Atual'];
     });
 
     depviz.sexoDim = filter.dimension(function (o) {
@@ -40,36 +43,25 @@ depviz.makeFilterAndDimensions = function (data) {
     
 }
 
-
-    
-
-
-depviz.grafico = function (data) {
-    
-var width = parseInt(d3.select('#graph')
-    .style('width'), 10);
-// console.log(width)
-
-depviz.TRANS_DURATION = 2000;
-
-// filtrando em masculino e feminino
-data.filter('MASCULINO');
-var homens = data.top(Infinity);
-
-data.filter();
-data.top(Infinity);
-
-data.filter('FEMININO');
-var mulheres = data.top(Infinity);
-
-//  criando objeto
-var sexoData = [
-    { key: 'Homens', value: homens.length },
-    { key: 'Mulheres', value: mulheres.length }
-];
+depviz.partidoData = function (data) {
+    data = depviz.partidoDim.group().all()
+        .sort(function (a, b) {
+            return b.value - a.value; // descending
+        });
+        return data;
+}
 
 
-// Getting our bar chart’ s dimensions
+
+depviz.partidosGraf = function () {
+ data = depviz.partidoData();        
+ var width = parseInt(d3.select('#graph')
+     .style('width'), 10);
+
+ depviz.TRANS_DURATION = 2000;
+
+
+ // Getting our bar chart’ s dimensions
  var chartHolder = d3.select("#graph");
 
  var margin = {
@@ -91,14 +83,14 @@ var sexoData = [
  yScale.rangeRound([height, 0]);
     
  
-// AXES
-var xAxis = d3.svg.axis()
+ // AXES
+ var xAxis = d3.svg.axis()
     .scale(xScale)
     .orient("bottom");
 
 
 
-var yAxis = d3.svg.axis()
+ var yAxis = d3.svg.axis()
     .scale(yScale)
     .orient('left')
     .ticks(10)
@@ -109,25 +101,25 @@ var yAxis = d3.svg.axis()
         return d;
     });
 
-//tooltip
-var tip = d3.tip()
+ //tooltip
+ var tip = d3.tip()
         .attr('class', 'd3-tip')
         .offset([-10, 0])
-        .html(function (sexoData) {
-            return "<strong>Total:</strong> <span style='color:red'>" + sexoData.value + "</span>";
+        .html(function (data) {
+            return "<strong>Total:</strong> <span style='color:red'>" + data.value + "</span>";
         })
 
-// build our chart’ s frame
- var svg = d3.select('#graph').append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g").classed('chart', true)
-    .attr("transform", "translate(" + margin.left + "," +
-        margin.top + ")");
+ // build our chart’ s frame
+  var svg = d3.select('#graph').append("svg")
+     .attr("width", width + margin.left + margin.right)
+     .attr("height", height + margin.top + margin.bottom)
+     .append("g").classed('chart', true)
+     .attr("transform", "translate(" + margin.left + "," +
+         margin.top + ")");
 
-svg.call(tip);
+ svg.call(tip);
 
-// ADD AXES
+ // ADD AXES
  svg.append("g")
      .attr("class", "x axis")
      .attr("transform", "translate(0," + height + ")");
@@ -142,55 +134,52 @@ svg.call(tip);
      .style("text-anchor", "end");
 
 
-// OUR UPDATE FUNCTION
-var update = function (data) {
+ // OUR UPDATE FUNCTION
+ depviz.updateMap = function (data) {
+         data = data.filter(function (d) {
+           return d.value > 0;
+         });
         // A. Update scale domains with new data
         xScale.domain(data.map(function (d) { return d.key; }));
-        yScale.domain([0, d3.max(data, function (d) {
-            return +d.value;
-        })])};
+        yScale.domain([0, d3.max(data, function (d) { return +d.value; })]);
 
-update(sexoData);
-
-// B. Use the axes generators with the new scale domains
-svg.select('.x.axis')
-    .transition().duration(depviz.TRANS_DURATION)
-    .call(xAxis) 
-        .selectAll("text") 
-            .style("text-anchor", "end")
-            .attr("dx", "2em")  //.attr("dx", "-.8em")
-            .attr("dy", "1em")// .attr("dy", ".15em")
-            .attr("transform", "rotate(0)"); //.attr("transform", "rotate(-65)");
-
-svg.select('.y.axis')
-    .transition().duration(depviz.TRANS_DURATION)
-    .call(yAxis);
-
-var yLabel = svg.select('#y-axis-label');
-yLabel.text("Numero de deputados");
-
- // JOIN DATA TO BAR-GROUP
- var bars = svg.selectAll('.bar')
-     .data(sexoData, function(d) {
-        return d.key; 
-    });
- // APPEND BARS FOR UNBOUND DATA
- bars.enter()
-     .append('rect').classed('bar', true);
- // UPDATE ALL BARS WITH BOUND DATA
- bars.attr('height', function (d, i) {
-     return height - yScale(d.value);
- })
-     .attr('width', xScale.rangeBand())
-     .on('mouseover', tip.show)
-     .on('mouseout', tip.hide)
+  // B. Use the axes generators with the new scale domains
+   svg.select('.x.axis')
      .transition().duration(depviz.TRANS_DURATION)
-     .attr('y', function (d) {
-         return yScale(d.value);
-     })
-     .attr('x', function (d) { return xScale(d.key);  
-     });
- // REMOVE ANY BARS WITHOUT BOUND DATA
- bars.exit().remove();
+     .call(xAxis) 
+         .selectAll("text") 
+             .style("text-anchor", "end")
+             .attr("dx", "-.8em") //  .attr("dx", "2em")  
+             .attr("dy", ".15em") //  .attr("dy", "1em")
+             .attr("transform", "rotate(-35)"); //  .attr("transform", "rotate(0)"); 
 
-}}(window.depviz = window.depviz || {}));
+  svg.select('.y.axis')
+     .transition().duration(depviz.TRANS_DURATION)
+     .call(yAxis);
+
+  var yLabel = svg.select('#y-axis-label');
+  yLabel.text("Numero de deputados");
+
+  // JOIN DATA TO BAR-GROUP
+   var bars = svg.selectAll('.bar')
+      .data(data, function(d) {
+         return d.key; 
+     });
+       // APPEND BARS FOR UNBOUND DATA
+    bars.enter()
+       .append('rect')
+       .classed('bar', true);
+        // UPDATE ALL BARS WITH BOUND DATA
+    bars
+        .attr('height', function (d, i) {return height - yScale(d.value);})
+        .attr('width', xScale.rangeBand())
+        .on('mouseover', tip.show)
+        .on('mouseout', tip.hide)
+        .transition().duration(depviz.TRANS_DURATION)
+        .attr('y', function (d) {return yScale(d.value);})
+        .attr('x', function (d) { return xScale(d.key);});
+        // REMOVE ANY BARS WITHOUT BOUND DATA
+   bars.exit().remove();
+    }
+};
+}(window.depviz = window.depviz || {}));

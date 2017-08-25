@@ -1,16 +1,8 @@
-(function (depviz) {
-var loadDsv = d3.dsv(";", "text / plain; charset = ISO - 8859 - 1");
-
-loadDsv("data/Deputados-BR-Dados-Por-Periodo.csv", function (error, data) {
-    if (error) {
-        console.log(error);
-    }
-    
-    depviz.listardep(data);
+(function (depviz) {    
+    // depviz.listardep(depviz.data);
           
-})
 
-depviz.listardep = function (data) {
+ depviz.listardep = function (data) {
     var rows, cells, upd;
     // Sort the winners' data by year
     var data = data.sort(function (a, b) {
@@ -80,5 +72,5 @@ depviz.listardep = function (data) {
     //     displayDep(
     //         data[Math.floor(Math.random() * data.length)]); 
     // }
-}
+ }
 }(window.depviz = window.depviz || {}));

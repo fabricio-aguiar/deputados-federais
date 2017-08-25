@@ -15,11 +15,11 @@ a:hover {
 }
 
 #chart { 
-    position: relative; 
-    top:10px;
+    position: absolute;
+    top:60px;
     height:200px;
     width:350px;
-    left:420px;
+    left:500px;
 }
 
 #nbviz {
@@ -84,8 +84,8 @@ a:hover {
     background:azure;
     top:60px;
 	left:10px;
-    width:550px;
-    height:550px;
+    width:400px;
+    height:400px;
 }
 
 #dep-winner{
@@ -96,14 +96,15 @@ a:hover {
 }
 
 #graph{
-    top:620px;
+    top:480px;
     height:250px;
     width:900px;
+    left:50px;
 }
 
 #dep-list{
     top:60px;
-    height:550px;
+    height:400px;
     width:290px;
     left:900px;
     padding-left:10px;
