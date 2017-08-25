@@ -66,12 +66,14 @@
 
     
     displayDep = function (data) {
+        link = "https://inter01.tse.jus.br/divulga-cand-2014/eleicao/2014/idEleicao/143/cargo/6/UF/";
+        link = link + data.UF + "/candidato/";
         d3.select('div#data')
           .selectAll('*')
           .remove();
         d3.select('div#data')
-          .append('img')
-          .attr('src', data['foto'])
+          .append('img') 
+          .attr('src', data['foto']) 
           .attr("class", "foto");
         d3.select('div#data')
             .append('div')
@@ -82,8 +84,16 @@
              direita.append('strong')
                     .append('p')
                     .text(data['Nome para Urna']);
+
              direita.append('p')
                  .text("Bens: " + formatMoney(data.Bens));
+             
+             id = data['foto'].split("/")[9];
+             id = id.split(".")[0];
+             direita.append('a')
+                 .attr('href', link + id)
+                 .text("Veja mais ");
+                 
         }
             
     

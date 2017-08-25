@@ -12,24 +12,29 @@ loadDsv("data/Deputados-BR-Dados-Por-Periodo.csv", function (error, data) {
     depviz.data = data;
     depviz.listardep(data);
     depviz.makeFilterAndDimensions(data);
-    depviz.partidosGraf(data);
-    depviz.updateMap(depviz.partidoData());
-    depviz.genero(depviz.sexoDim);
+    mapa = depviz.partidoData(data);
+    depviz.partidosGraf(mapa);
+    depviz.updateMap(mapa);
+    depviz.genero(depviz.sexoDim); 
+    depviz.sexoDim.filter();
+    depviz.sexoDim.top(Infinity);
 })
 
 depviz.makeFilterAndDimensions = function (data) {
-    filter = crossfilter(data);
-    depviz.partidoDim = filter.dimension(function (o) {
+    depviz.filter = crossfilter(data);
+    
+    depviz.estadoDim = depviz.filter.dimension(function (o) {
+        return o.UF;
+    });
+
+    depviz.partidoDim = depviz.filter.dimension(function (o) {
         return o['Partido Atual'];
     });
 
-    depviz.sexoDim = filter.dimension(function (o) {
+    depviz.sexoDim = depviz.filter.dimension(function (o) {
         return o.Sexo;
     });
-    
-    depviz.estadoDim = filter.dimension(function (o) {
-        return o.UF;
-    });
+
     // partidoDim.filter('PMDB'); 
     // var depPMDB = partidoDim.top(Infinity); 
     // console.log("Numero de deputados do PMDB: " + depPMDB.length)
@@ -53,8 +58,8 @@ depviz.partidoData = function (data) {
 
 
 
-depviz.partidosGraf = function () {
- data = depviz.partidoData();        
+depviz.partidosGraf = function (data) {
+//  data = depviz.partidoData();       
  var width = parseInt(d3.select('#graph')
      .style('width'), 10);
 

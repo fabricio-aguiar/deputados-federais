@@ -1,5 +1,5 @@
 (function (depviz) {
-   
+  
    
 depviz.genero = function (gdata) {
     d3.select('#chart')

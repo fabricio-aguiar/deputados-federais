@@ -94,12 +94,13 @@ function clicked(d) {
 
 function reset() {
     depviz.estadoDim.filter(); 
-    depviz.sexoDim.filter();
     depviz.partidoDim.filter();
     data = depviz.estadoDim.top(Infinity);
     depviz.updateMap(depviz.partidoData(depviz.data));
     depviz.listardep(data);
     depviz.genero(depviz.sexoDim);
+    depviz.sexoDim.filter();
+    depviz.sexoDim.top(Infinity);
     active.classed("active", false);
     active = d3.select(null);
 
