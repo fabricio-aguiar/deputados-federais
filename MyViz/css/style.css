@@ -105,15 +105,30 @@ a:hover {
 #dep-list{
     top:60px;
     height:400px;
-    width:290px;
+    width:340px;
     left:900px;
     padding-left:10px;
 }
 
-#data pre{
+#data{
 	position: absolute;
     top:880px;
+    width: 800px;
+    height: 500px;
     }
+
+.foto {
+    position: absolute;
+    top: 0px;
+    left:0px;
+}
+
+.lado {
+    position: absolute;
+    top: 0px;
+    left: 200px;
+    width: 800px;
+}
 /* MAP */
 
 .graticule {
@@ -193,7 +208,8 @@ a:hover {
 #dep-list table{ font-size:10px; }
 
 #dep-list table th#nome {width:120px}
-#dep-list table th#ceap {width:130px}
+#dep-list table th#situacao {width:130px}
+#dep-list table th#ceap {width:140px}
 #dep-list table th#partido {width:60px}
 #dep-list table th#uf {width:20px}
 #dep-list table th#atuacao {width:60px}
@@ -315,11 +331,14 @@ a:hover {
     stroke-linejoin: round;
     stroke-linecap: round;
     pointer-events: none;
+    position: absolute;
+    left: 0px;
 }
 
 .states{
     fill: #ccc;
     cursor: pointer;
+    position: absolute;
 	left: 0px;
 }
 

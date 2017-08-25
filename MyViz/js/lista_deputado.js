@@ -18,11 +18,13 @@
 
     rows.enter().append('tr') 
         .on('click', function (d) {
-            console.log('You clicked a row ' + JSON.stringify(d));
-            d3.select('div#data pre')
-                .html(JSON.stringify(d, null, 4)); 
-            window.scrollBy(0, 880);
-            // displayDep(d); 
+            // console.log('You clicked a row ' + JSON.stringify(d));
+            // d3.select('div#data')
+            //     .html(JSON.stringify(d, null, 4)); 
+            displayDep(d); 
+            // document.getElementById('data').scrollIntoView();
+            // window.scrollBy(0, 880);
+            window.scrollTo(0, document.body.scrollHeight);
         });
     // Fade out excess rows over 2 seconds
     TRANS_DURATION = 2000;
@@ -31,12 +33,7 @@
         .style('opacity', 0)
         .remove();
     
-    // aux = data;
-    // aux.forEach(function(d) {
-    //   d['Total CEAP'] = "R$ " + d['Total CEAP'];
-    //   d['Total CEAP'] = d['Total CEAP'].replace(".",",");  
-    // });
-    
+      
     var localized = d3.locale({
         "decimal": ",",
         "thousands": ".",
@@ -58,7 +55,7 @@
 
     cells = rows.selectAll('td') 
         .data(function (d) {
-            return [d['Nome para Urna'], formatMoney(d['Total CEAP']), d.Partido, d.UF, numberFormat(d['Atuacao em meses'])];
+            return [d['Nome para Urna'], d['Situacao na Legislatura Atual'], formatMoney(d['Total CEAP']), d.Partido, d.UF, Math.floor(d['Atuacao em meses'])];
         });
 
     // Append data cells, then set their property text
@@ -67,10 +64,28 @@
         return d;
     });
 
-    // Display a random winner if there is one or more
-    // if (data.length) {
-    //     displayDep(
-    //         data[Math.floor(Math.random() * data.length)]); 
-    // }
+    
+    displayDep = function (data) {
+        d3.select('div#data')
+          .selectAll('*')
+          .remove();
+        d3.select('div#data')
+          .append('img')
+          .attr('src', data['foto'])
+          .attr("class", "foto");
+        d3.select('div#data')
+            .append('div')
+            .attr("class", "lado");
+
+        direita = d3.select('.lado');
+
+             direita.append('strong')
+                    .append('p')
+                    .text(data['Nome para Urna']);
+             direita.append('p')
+                 .text("Bens: " + formatMoney(data.Bens));
+        }
+            
+    
  }
 }(window.depviz = window.depviz || {}));

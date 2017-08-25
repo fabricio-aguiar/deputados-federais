@@ -28,7 +28,7 @@ depviz.genero = function (gdata) {
 
     var sdata = [
         { 'n': h, 'color': '#0000FF', 'name': 'Homens', 'sex': 'male' }, 
-        { 'n': m, 'color': '#FFC0CB', 'name': 'Mulheres', 'sex': 'female' },
+        { 'n': m, 'color': '#8b0000', 'name': 'Mulheres', 'sex': 'female' },
     ];
         
     modulo = 20;
