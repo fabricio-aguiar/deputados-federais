@@ -38,7 +38,7 @@ depviz.genero = function (gdata) {
 	  .domain([0, modulo])
 	  .range([0, width]),
 	yScale = d3.scale.linear()
-	  .domain([0, 6])
+	  .domain([0, 8])
 	  .range([height, 0]);
 	 
 	
@@ -67,7 +67,7 @@ for (key = 0; key < data.length; key++) {
    data[key]['y'] = column;
    count++;
  }
- altura = column;
+//  altura = column;
  count=0;
  for (key = sdata[0]['n']; key < lt; key++) {
          column = Math.floor(count / modulo);
@@ -76,11 +76,11 @@ for (key = 0; key < data.length; key++) {
          data[key]['y'] = column;
          count++;
  }
- if (altura < column){
-     altura = column;
- }
+//  if (altura < column){
+//      altura = column;
+//  }
 //  icon = { 'width': height / 10, 'height': height / (altura + 2) };
- icon = { 'width': 18, 'height': 25.71 };
+ icon = { 'width': 18, 'height': 23 };
 
 
  var tip = d3.tip()
@@ -118,12 +118,12 @@ for (key = 0; key < data.length; key++) {
  legend = ["Mulheres","Homens"];
  for (key in sdata) {        
   svg.append("text")
-   .attr('font-size',20)
+   .attr('font-size',18)
    .attr('font-family', 'sans-serif')
    .attr('text-anchor',"start")
    .attr('fill', sdata[key]['color'])
    .attr('x',function(d) {return key*width/2;})
-   .attr('y',5)
+   .attr('y',3)
    .text(sdata[key]['name']);
  }}
 }(window.depviz = window.depviz || {}));
