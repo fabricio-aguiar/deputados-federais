@@ -22,8 +22,12 @@ depviz.genero = function (gdata) {
         h = homens.length;
         m = mulheres.length;
         dvs = 1;
+        y = 8;
+        altura = 23;
         if (h > 100) {
             dvs = 10;
+            y = 4;
+            altura = 25;
         }
 
     var sdata = [
@@ -38,7 +42,7 @@ depviz.genero = function (gdata) {
 	  .domain([0, modulo])
 	  .range([0, width]),
 	yScale = d3.scale.linear()
-	  .domain([0, 8])
+	  .domain([0, y])
 	  .range([height, 0]);
 	 
 	
@@ -80,7 +84,7 @@ for (key = 0; key < data.length; key++) {
 //      altura = column;
 //  }
 //  icon = { 'width': height / 10, 'height': height / (altura + 2) };
- icon = { 'width': 18, 'height': 23 };
+ icon = { 'width': 18, 'height': altura };
 
 
  var tip = d3.tip()
