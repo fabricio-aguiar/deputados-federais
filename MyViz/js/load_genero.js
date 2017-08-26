@@ -26,8 +26,8 @@ depviz.genero = function (gdata) {
         altura = 23;
         if (h > 100) {
             dvs = 10;
-            y = 4;
-            altura = 25;
+            y = 6;
+            altura = 23;
         }
 
     var sdata = [
