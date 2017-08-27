@@ -6,7 +6,7 @@ loadDsv("data/Deputados-BR-Dados-Por-Periodo.csv", function (error, data) {
         console.log(error);
     }
     
-    d3.select('h2#data-title').text('Deputados federais');
+    d3.select('h2#data-title').text('Deputados federais (2015-2019)');
     // d3.select('div#data pre')
     //     .html(JSON.stringify(data, null, 4)); 
     depviz.data = data;
@@ -18,6 +18,9 @@ loadDsv("data/Deputados-BR-Dados-Por-Periodo.csv", function (error, data) {
     depviz.genero(depviz.sexoDim); 
     depviz.sexoDim.filter();
     depviz.sexoDim.top(Infinity);
+    var donutData = depviz.genData(data);
+    var donuts = new depviz.DonutCharts();
+    donuts.create(donutData);
 })
 
 depviz.makeFilterAndDimensions = function (data) {
@@ -33,6 +36,10 @@ depviz.makeFilterAndDimensions = function (data) {
 
     depviz.sexoDim = depviz.filter.dimension(function (o) {
         return o.Sexo;
+    });
+
+    depviz.corDim = depviz.filter.dimension(function (o) {
+        return o['Cor/Raça'];
     });
 
     // partidoDim.filter('PMDB'); 
@@ -56,7 +63,13 @@ depviz.partidoData = function (data) {
         return data;
 }
 
-
+depviz.corData = function (data) {
+    data = depviz.corDim.group().all()
+        .sort(function (a, b) {
+            return b.value - a.value; // descending
+        });
+        return data;
+}
 
 depviz.partidosGraf = function (data) {
 //  data = depviz.partidoData();       

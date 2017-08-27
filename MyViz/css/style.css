@@ -16,10 +16,18 @@ a:hover {
 
 #chart { 
     position: absolute;
-    top:60px;
+    top:130px;
     height:200px;
     width:350px;
     left:500px;
+}
+
+#donut {
+    position: absolute;
+    top: 200px;
+    height: 400px;
+    width: 750px;
+    left: 450px;
 }
 
 #nbviz {
@@ -40,7 +48,7 @@ a:hover {
     font-size: 11px;
     top: 18px;
     width: 300px;
-    right: 0px;
+    right: 80px;
     line-height: 1.2;
 }
 
@@ -82,7 +90,7 @@ a:hover {
 
 #dep-map{
     background:azure;
-    top:60px;
+    top:130px;
 	left:10px;
     width:400px;
     height:400px;
@@ -96,14 +104,14 @@ a:hover {
 }
 
 #graph{
-    top:480px;
+    top:530px;
     height:250px;
     width:900px;
     left:50px;
 }
 
 #dep-list{
-    top:60px;
+    top:120px;
     height:400px;
     width:340px;
     left:900px;
@@ -343,11 +351,11 @@ a:hover {
 }
 
 .active {
-    fill: red;
+    fill: blue;
 }
 
 .states :hover {
-    fill: red;
+    fill: blue;
 }
 
 .background {

@@ -90,6 +90,12 @@ function clicked(d) {
   data = depviz.sexoDim.top(Infinity);
   depviz.updateMap(depviz.partidoData(data));
   depviz.listardep(data);
+  charts = d3.select('#donut')
+             .selectAll('*')
+             .remove();
+  donutData = depviz.genData(data);
+  var donuts = new depviz.DonutCharts();
+  donuts.create(donutData);
 }
 
 function reset() {
@@ -98,6 +104,12 @@ function reset() {
     data = depviz.estadoDim.top(Infinity);
     depviz.updateMap(depviz.partidoData(depviz.data));
     depviz.listardep(data);
+    charts = d3.select('#donut')
+        .selectAll('*')
+        .remove();
+    donutData = depviz.genData(data);
+    var donuts = new depviz.DonutCharts();
+    donuts.create(donutData);
     depviz.genero(depviz.sexoDim);
     depviz.sexoDim.filter();
     depviz.sexoDim.top(Infinity);
