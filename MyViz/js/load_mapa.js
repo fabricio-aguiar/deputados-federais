@@ -42,8 +42,10 @@ d3.json("data/uf.json", function (error, data) {
         .attr("d", path)
         .on("click", clicked);
 
-    borda = svg.append("path")
+    borda = svg.append("g")
         .attr("class", "state-borders")
+        .append("path")
+        .attr("d", path)
         .attr("d", path(topojson.mesh(data, data.objects.uf, function (a, b) { return a !== b; })));
 
 })
