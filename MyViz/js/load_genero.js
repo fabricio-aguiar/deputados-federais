@@ -3,7 +3,7 @@
    
 depviz.genero = function (gdata) {
     d3.select('#chart')
-        .selectAll('svg').remove()
+        .selectAll('*').remove()
     var margin = { top: 10, right: 10, bottom: 10, left: 15 };
     var chartHolder = d3.select("#chart");
     var boundingRect = chartHolder.node().getBoundingClientRect();
@@ -103,7 +103,7 @@ for (key = 0; key < data.length; key++) {
   svg.call(tip);
     
   var icons = svg.selectAll(".icon")
-		.data(data)
+	  .data(data)
       .enter().append("text")
         .attr('font-family', 'FontAwesome')
         .attr('font-size', icon['height'])

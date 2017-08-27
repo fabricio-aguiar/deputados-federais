@@ -1,4 +1,11 @@
 (function (depviz) {
+var w = window,
+    d = document,
+    e = d.documentElement,
+    g = d.getElementsByTagName('body')[0],
+    x = w.innerWidth || e.clientWidth || g.clientWidth,
+    y = w.innerHeight || e.clientHeight || g.clientHeight;
+console.log(x + ' × ' + y);
 var loadDsv = d3.dsv(";", "text / plain; charset = ISO - 8859 - 1");
 
 loadDsv("data/Deputados-BR-Dados-Por-Periodo.csv", function (error, data) {

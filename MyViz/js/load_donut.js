@@ -249,7 +249,7 @@ depviz.DonutCharts = function(dataset) {
             .data(dataset)
             .enter().append('svg:svg')
             .attr('width', (chart_r + chart_m) * 2)
-            .attr('height', (chart_r + chart_m) * 2.2)
+            .attr('height', (chart_r + chart_m) * 1.8)
             .append('svg:g')
             .attr('class', function (d, i) {
                 return 'donut type' + i;
