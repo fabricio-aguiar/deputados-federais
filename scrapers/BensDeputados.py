@@ -1,23 +1,15 @@
-import time
 from selenium import webdriver
-from selenium.webdriver.support.select import Select
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.chrome.options import Options
 from unicodedata import normalize
 from string import punctuation
 import pandas as pd
-import numpy as np
 import csv
 
 
 def remover_acentos(txt):
     txt = ''.join([letter for letter in txt if letter not in punctuation])
     txt = txt.upper()
-    return normalize('NFKD', txt).encode('ASCII','ignore').decode('ASCII')
+    return normalize('NFKD', txt).encode('ASCII', 'ignore').decode('ASCII')
 
 
 print("\nBens Deputados")
@@ -28,23 +20,42 @@ options.add_argument("--start-maximized")
 
 browser = webdriver.Chrome(chrome_options=options)
 
-lista = [['Nome', 'Nome para Urna', 'Numero', 'Partido', 'Coligação', 'Situação', 'Votação', '% Válidos', 'Sexo', 'Estado Civil', 'Ocupacao', 'Cor/Raça', 'Data Nasc.', 'Idade', 'Instrucao', 'Bens', 'UF', 'foto']]
+lista = [[
+    'Nome',
+    'Nome para Urna',
+    'Numero',
+    'Partido',
+    'Coligação',
+    'Situação',
+    'Votação',
+    '% Validos',
+    'Sexo',
+    'Estado Civil',
+    'Ocupacao',
+    'Cor/Raca',
+    'Data Nasc.',
+    'Idade',
+    'Instrucao',
+    'Bens',
+    'UF',
+    'foto'
+]]
 
-df = pd.read_csv('Detalhes_Deputados.csv',encoding='latin1')
+df = pd.read_csv('Detalhes_Deputados.csv', encoding='utf-8')
 df = df[df['Legislatura'] == 55]
 df['Nome'] = df['Nome'].apply(lambda x: remover_acentos(x))
 
-dados =  pd.read_csv('Resultado_da_Eleicao.csv',encoding='latin1',sep=';')
+dados = pd.read_csv('Resultado_da_Eleicao.csv', encoding='latin1', sep=';')
 dados['Candidato'] = dados['Candidato'].apply(lambda x: remover_acentos(str(x)))
-dados['UF'].fillna(value = '-', inplace= True)
+dados['UF'].fillna(value='-', inplace=True)
 for i, row in enumerate(dados['UF']):
     if row != "-":
         aux = row
     else:
-        dados.set_value(index = i, col = 'UF', value= aux)
+        dados.set_value(index=i, col='UF', value=aux)
 
 for uf in df['UF'].unique():
-    browser.get("http://inter01.tse.jus.br/divulga-cand-2014/eleicao/2014/UF/" + uf +"/candidatos/cargo/6")
+    browser.get("http://inter01.tse.jus.br/divulga-cand-2014/eleicao/2014/UF/" + uf + "/candidatos/cargo/6")
     browser.set_page_load_timeout(20)
     estados = df[df['UF'] == uf]
     filtroUF = dados[dados['UF'] == uf]
@@ -56,15 +67,15 @@ for uf in df['UF'].unique():
             numero = deputado
             partido = 'Deferido'
         else:
-            numero = str(numero[0]).replace(".0","")
+            numero = str(numero[0]).replace(".0", "")
             partido = partido[0]
         if partido == 'PR':
             partido = numero
         # print("Numero: " + numero)
         browser.find_element_by_xpath("//*[@id='tbl-candidatos_filter']/label/input").send_keys(numero)
-        try: 
-            browser.find_element_by_xpath('//*[contains(text(), "'+ partido +'")]').click() 
-            
+        try:
+            browser.find_element_by_xpath('//*[contains(text(), "' + partido + '")]').click()
+
         except:
             browser.find_element_by_xpath("//*[@id='tbl-candidatos_filter']/label/input").clear()
             nom = estados.iloc[i]['Nome Parlamentar']
@@ -78,9 +89,9 @@ for uf in df['UF'].unique():
                     if len(browser.find_elements_by_xpath('//*[contains(text(), "Deferido")]')) == 1:
                         break
                 try:
-                    browser.find_element_by_xpath('//*[contains(text(), "Deferido")]').click() 
+                    browser.find_element_by_xpath('//*[contains(text(), "Deferido")]').click()
                     provisorio[:] = []
-                    
+
                 except:
                     browser.find_element_by_xpath("//*[@id='tbl-candidatos_filter']/label/input").clear()
                     continue
@@ -102,29 +113,46 @@ for uf in df['UF'].unique():
         sexo = browser.find_element_by_xpath("/html/body/div/div[4]/table/tbody/tr[2]/td[2]").text
         estCivil = browser.find_element_by_xpath("/html/body/div/div[4]/table/tbody/tr[3]/td[2]").text
         ocupacao = browser.find_element_by_xpath("/html/body/div/div[4]/table/tbody/tr[6]/td[2]").text
-        cor = browser.find_element_by_xpath("/html/body/div/div[4]/table/tbody/tr[4]/td").text 
+        cor = browser.find_element_by_xpath("/html/body/div/div[4]/table/tbody/tr[4]/td").text
         ano = browser.find_element_by_xpath("/html/body/div/div[4]/table/tbody/tr[3]/td[1]").text
-        data = ano 
-        ano = ano.split("/")[2] 
+        data = ano
+        ano = ano.split("/")[2]
         idade = 2017 - int(ano)
         instrucao = browser.find_element_by_xpath("/html/body/div/div[4]/table/tbody/tr[6]/td[1]").text
         bem = browser.find_element_by_xpath("//*[@id='tab-bens']/table/tfoot/tr/th[2]").text
         bem = bem.split("$ ")[1]
         foto = browser.find_element_by_xpath("/html/body/div/div[3]/p[1]/img").get_attribute("src")
         foto = foto.split("?")[0]
-        linha = [nome, nomeUrna, numero, partido, coligacao, situacao, voto, validos, sexo, estCivil, ocupacao, cor, data, idade, instrucao, bem.replace(".",""), uf, foto]
+        linha = [
+            nome,
+            nomeUrna,
+            numero,
+            partido,
+            coligacao,
+            situacao,
+            voto,
+            validos,
+            sexo,
+            estCivil,
+            ocupacao,
+            cor,
+            data,
+            idade,
+            instrucao,
+            bem.replace(".", ""),
+            uf,
+            foto
+        ]
         if linha not in lista:
             lista.append(linha)
         print(linha)
         browser.back()
-        
 
 
-with open ('Bens_Deputados.csv','w', newline='') as file:
-    writer=csv.writer(file)
+with open('Bens_Deputados.csv', 'w', newline='') as file:
+    writer = csv.writer(file)
     for row in lista:
-        print("Writing :",row)
+        print("Writing :", row)
         writer.writerows([row])
-   
 
 browser.close()

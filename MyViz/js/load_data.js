@@ -6,23 +6,23 @@ var w = window,
     x = w.innerWidth || e.clientWidth || g.clientWidth,
     y = w.innerHeight || e.clientHeight || g.clientHeight;
 console.log(x + ' × ' + y);
-var loadDsv = d3.dsv(";", "text / plain; charset = ISO - 8859 - 1");
+var loadDsv = d3.dsv(";", "text/plain; charset = UTF-8");
 
 loadDsv("data/Deputados-BR-Dados-Por-Periodo.csv", function (error, data) {
     if (error) {
         console.log(error);
     }
-    
+
     d3.select('h2#data-title').text('Deputados federais (2015-2019)');
     // d3.select('div#data pre')
-    //     .html(JSON.stringify(data, null, 4)); 
+    //     .html(JSON.stringify(data, null, 4));
     depviz.data = data;
     depviz.listardep(data);
     depviz.makeFilterAndDimensions(data);
     mapa = depviz.partidoData(data);
     depviz.partidosGraf(mapa);
     depviz.updateMap(mapa);
-    depviz.genero(depviz.sexoDim); 
+    depviz.genero(depviz.sexoDim);
     depviz.sexoDim.filter();
     depviz.sexoDim.top(Infinity);
     var donutData = depviz.genData(data);
@@ -32,7 +32,7 @@ loadDsv("data/Deputados-BR-Dados-Por-Periodo.csv", function (error, data) {
 
 depviz.makeFilterAndDimensions = function (data) {
     depviz.filter = crossfilter(data);
-    
+
     depviz.estadoDim = depviz.filter.dimension(function (o) {
         return o.UF;
     });
@@ -49,8 +49,8 @@ depviz.makeFilterAndDimensions = function (data) {
         return o['Cor/Raça'];
     });
 
-    // partidoDim.filter('PMDB'); 
-    // var depPMDB = partidoDim.top(Infinity); 
+    // partidoDim.filter('PMDB');
+    // var depPMDB = partidoDim.top(Infinity);
     // console.log("Numero de deputados do PMDB: " + depPMDB.length)
     // for (i = 0; i < depPMDB.length; i++){
     // console.log(depPMDB[i]["Nome para Urna"])}
@@ -59,7 +59,7 @@ depviz.makeFilterAndDimensions = function (data) {
     // partidoDim.top(Infinity);
 
     // depviz.grafico(depviz.sexoDim);
-    
+
 }
 
 depviz.partidoData = function (data) {
@@ -79,7 +79,7 @@ depviz.corData = function (data) {
 }
 
 depviz.partidosGraf = function (data) {
-//  data = depviz.partidoData();       
+//  data = depviz.partidoData();
  var width = parseInt(d3.select('#graph')
      .style('width'), 10);
 
@@ -98,16 +98,16 @@ depviz.partidosGraf = function (data) {
  var boundingRect = chartHolder.node().getBoundingClientRect();
  var width = boundingRect.width - margin.left - margin.right,
      height = boundingRect.height - margin.top - margin.bottom;
- 
+
  // SCALES WITH RANGES
- 
+
  var xScale = d3.scale.ordinal()
  xScale.rangeBands([0, width], 0.1);
 
  var yScale = d3.scale.linear()
  yScale.rangeRound([height, 0]);
-    
- 
+
+
  // AXES
  var xAxis = d3.svg.axis()
     .scale(xScale)
@@ -171,12 +171,12 @@ depviz.partidosGraf = function (data) {
   // B. Use the axes generators with the new scale domains
    svg.select('.x.axis')
      .transition().duration(depviz.TRANS_DURATION)
-     .call(xAxis) 
-         .selectAll("text") 
+     .call(xAxis)
+         .selectAll("text")
              .style("text-anchor", "end")
-             .attr("dx", "-.8em") //  .attr("dx", "2em")  
+             .attr("dx", "-.8em") //  .attr("dx", "2em")
              .attr("dy", ".15em") //  .attr("dy", "1em")
-             .attr("transform", "rotate(-35)"); //  .attr("transform", "rotate(0)"); 
+             .attr("transform", "rotate(-35)"); //  .attr("transform", "rotate(0)");
 
   svg.select('.y.axis')
      .transition().duration(depviz.TRANS_DURATION)
@@ -188,7 +188,7 @@ depviz.partidosGraf = function (data) {
   // JOIN DATA TO BAR-GROUP
    var bars = svg.selectAll('.bar')
       .data(data, function(d) {
-         return d.key; 
+         return d.key;
      });
        // APPEND BARS FOR UNBOUND DATA
     bars.enter()
